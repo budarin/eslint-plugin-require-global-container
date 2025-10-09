@@ -1,0 +1,26 @@
+{
+    "name": "eslint-plugin-require-global-container",
+    "description": "Eslint plugin for checking container name in require",
+    "author": "Vadim Budarin",
+    "version": "1.0.0",
+    "keywords": [
+        "eslint",
+        "eslint-plugin",
+        "require-global-container",
+        "eslint-plugin-require-global-container"
+    ],
+    "type": "module",
+    "main": "index.js",
+    "license": "ISC",
+    "devDependencies": {
+        "prettier": "^3.6.2",
+        "typescript": "^5.9.3"
+    },
+    "scripts": {
+        "build": "tsc && cp src/*.css dist/",
+        "type-check": "tsc --noEmit",
+        "pnpm-install": "pnpm install",
+        "upgrade-dependencies": "pnpm upgrade -i",
+        "publish-package": "pnpm build && pnpm publish --access=public"
+    }
+}
