@@ -1,5 +1,5 @@
 {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "name": "@budarin/eslint-plugin-require-global-container",
     "description": "Eslint plugin for checking container name in require",
     "author": "Vadim Budarin",
@@ -10,7 +10,9 @@
         "eslint-plugin-require-global-container"
     ],
     "type": "module",
-    "main": "dist/index.js",
+    "exports": {
+        ".": "./dist/index.js"
+    },
     "license": "ISC",
     "devDependencies": {
         "prettier": "^3.6.2"
