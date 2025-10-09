@@ -13,12 +13,10 @@
     "main": "index.js",
     "license": "ISC",
     "devDependencies": {
-        "prettier": "^3.6.2",
-        "typescript": "^5.9.3"
+        "prettier": "^3.6.2"
     },
     "scripts": {
-        "build": "tsc && cp src/*.css dist/",
-        "type-check": "tsc --noEmit",
+        "build": "mkdir -p dist && cp -rf src/. dist/ >/dev/null 2>&1",
         "pnpm-install": "pnpm install",
         "upgrade-dependencies": "pnpm upgrade -i",
         "publish-package": "pnpm build && pnpm publish --access=public"
