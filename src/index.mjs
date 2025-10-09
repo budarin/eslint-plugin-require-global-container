@@ -1,7 +1,6 @@
 // Полный список глобальных объектов браузера
 const BROWSER_GLOBALS = new Set([
     // === ОСНОВНЫЕ ОБЪЕКТЫ БРАУЗЕРА ===
-    'window',
     'document',
     'navigator',
     'location',
