@@ -17,7 +17,7 @@ pnpm add @budarin/eslint-plugin-require-global-container
 ```js
 import { requireGlobalContainerPlugin } from '@budarin/eslint-plugin-require-global-container';
 
-export const srcTsConfig = {
+export const сonfig = {
     plugins: {
         'require-global-container': requireGlobalContainerPlugin,
     },
@@ -52,15 +52,11 @@ fetch('/api/data');
 window.console.log('test');
 window.localStorage.setItem('key', 'value');
 
-// Через browser
+// через объект, описывающий данный объект
+const browser = isTest ? windowMock : window;
+...
 browser.console.log('test');
 browser.localStorage.setItem('key', 'value');
-
-// Через любой другой объект
-myApp.console.log('test');
-testEnv.localStorage.setItem('key', 'value');
-api.fetch('/data');
-utils.setTimeout(() => {}, 1000);
 ```
 
 ## Конфигурация
