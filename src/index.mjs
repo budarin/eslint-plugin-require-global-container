@@ -1,3 +1,243 @@
+// Полный список глобальных объектов браузера
+const BROWSER_GLOBALS = new Set([
+    // === ОСНОВНЫЕ ОБЪЕКТЫ БРАУЗЕРА ===
+    'window',
+    'document',
+    'navigator',
+    'location',
+    'history',
+    'screen',
+    'frames',
+    'parent',
+    'top',
+    'self',
+
+    // === STORAGE API ===
+    'localStorage',
+    'sessionStorage',
+    'indexedDB',
+
+    // === CONSOLE И УТИЛИТЫ ===
+    'console',
+    'alert',
+    'confirm',
+    'prompt',
+
+    // === TIMERS ===
+    'setTimeout',
+    'setInterval',
+    'clearTimeout',
+    'clearInterval',
+    'requestAnimationFrame',
+    'cancelAnimationFrame',
+    'requestIdleCallback',
+    'cancelIdleCallback',
+
+    // === NETWORK API ===
+    'fetch',
+    'XMLHttpRequest',
+    'WebSocket',
+    'EventSource',
+    'AbortController',
+    'AbortSignal',
+
+    // === URL И FORM API ===
+    'URL',
+    'URLSearchParams',
+    'FormData',
+    'Blob',
+    'File',
+    'FileReader',
+    'FileList',
+
+    // === CRYPTO API ===
+    'crypto',
+    'SubtleCrypto',
+
+    // === PERFORMANCE API ===
+    'performance',
+    'PerformanceObserver',
+
+    // === DOM UTILITIES ===
+    'getComputedStyle',
+    'matchMedia',
+    'ResizeObserver',
+    'IntersectionObserver',
+    'MutationObserver',
+
+    // === WINDOW METHODS ===
+    'open',
+    'close',
+    'focus',
+    'blur',
+    'scroll',
+    'scrollTo',
+    'scrollBy',
+    'print',
+    'postMessage',
+    'addEventListener',
+    'removeEventListener',
+    'dispatchEvent',
+    'atob',
+    'btoa',
+
+    // === JAVASCRIPT BUILT-IN OBJECTS ===
+    'Math',
+    'Date',
+    'RegExp',
+    'Error',
+    'EvalError',
+    'RangeError',
+    'ReferenceError',
+    'SyntaxError',
+    'TypeError',
+    'URIError',
+    'Promise',
+    'Symbol',
+    'Map',
+    'Set',
+    'WeakMap',
+    'WeakSet',
+    'Array',
+    'Object',
+    'String',
+    'Number',
+    'Boolean',
+    'Function',
+    'ArrayBuffer',
+    'DataView',
+    'Int8Array',
+    'Uint8Array',
+    'Uint8ClampedArray',
+    'Int16Array',
+    'Uint16Array',
+    'Int32Array',
+    'Uint32Array',
+    'Float32Array',
+    'Float64Array',
+    'BigInt64Array',
+    'BigUint64Array',
+    'BigInt',
+
+    // === JSON И УТИЛИТЫ ===
+    'JSON',
+    'parseInt',
+    'parseFloat',
+    'isNaN',
+    'isFinite',
+    'encodeURI',
+    'decodeURI',
+    'encodeURIComponent',
+    'decodeURIComponent',
+    'escape',
+    'unescape',
+
+    // === WEB WORKERS ===
+    'Worker',
+    'SharedWorker',
+    'ServiceWorker',
+    'BroadcastChannel',
+
+    // === NOTIFICATIONS ===
+    'Notification',
+
+    // === GEOLOCATION ===
+    'geolocation',
+
+    // === MEDIA API ===
+    'MediaDevices',
+    'MediaRecorder',
+    'MediaStream',
+    'MediaStreamTrack',
+
+    // === CANVAS ===
+    'CanvasRenderingContext2D',
+    'WebGLRenderingContext',
+    'WebGL2RenderingContext',
+
+    // === WEB AUDIO ===
+    'AudioContext',
+    'OfflineAudioContext',
+
+    // === WEB COMPONENTS ===
+    'customElements',
+    'ShadowRoot',
+
+    // === INTERSECTION OBSERVER ===
+    'IntersectionObserver',
+
+    // === RESIZE OBSERVER ===
+    'ResizeObserver',
+
+    // === MUTATION OBSERVER ===
+    'MutationObserver',
+
+    // === WEB ANIMATIONS ===
+    'Animation',
+    'KeyframeEffect',
+
+    // === WEB STREAMS ===
+    'ReadableStream',
+    'WritableStream',
+    'TransformStream',
+
+    // === WEB LOCK API ===
+    'navigator.locks',
+
+    // === CLIPBOARD API ===
+    'navigator.clipboard',
+
+    // === PERMISSIONS API ===
+    'navigator.permissions',
+
+    // === BATTERY API ===
+    'navigator.getBattery',
+
+    // === DEVICE ORIENTATION ===
+    'DeviceOrientationEvent',
+    'DeviceMotionEvent',
+
+    // === TOUCH EVENTS ===
+    'Touch',
+    'TouchList',
+    'TouchEvent',
+
+    // === DRAG AND DROP ===
+    'DataTransfer',
+    'DataTransferItem',
+
+    // === WEB STORAGE ===
+    'Storage',
+
+    // === WEB SOCKETS ===
+    'WebSocket',
+
+    // === SERVER-SENT EVENTS ===
+    'EventSource',
+
+    // === WEB CRYPTOGRAPHY ===
+    'CryptoKey',
+    'CryptoKeyPair',
+
+    // === WEB ASSEMBLY ===
+    'WebAssembly',
+
+    // === NODE.JS ГЛОБАЛЫ (если используются в браузерном контексте) ===
+    'Buffer',
+    'process',
+    'global',
+    'globalThis',
+
+    // === ДОПОЛНИТЕЛЬНЫЕ ГЛОБАЛЬНЫЕ ФУНКЦИИ ===
+    'eval',
+    'Function',
+    'setImmediate',
+    'clearImmediate',
+]);
+
+// Кэш для проверенных свойств на уровне плагина
+const globalPropertiesCache = new Map();
+
 const requireGlobalContainer = {
     meta: {
         type: 'suggestion',
@@ -35,163 +275,110 @@ const requireGlobalContainer = {
         const { exceptions = [], defaultContainer = 'window' } = options;
         const exceptionsSet = new Set(exceptions);
 
-        // Кэш для проверенных свойств window
-        const windowPropertiesCache = new Map();
+        // Кэш для области видимости (Map для быстрого поиска)
+        const scopeCache = new Map();
 
         function isWindowProperty(name) {
+            // Быстрая проверка исключений
             if (exceptionsSet.has(name)) {
                 return false;
             }
 
-            // Проверяем кэш
-            if (windowPropertiesCache.has(name)) {
-                return windowPropertiesCache.get(name);
+            // Проверяем глобальный кэш
+            if (globalPropertiesCache.has(name)) {
+                return globalPropertiesCache.get(name);
             }
 
-            let isProperty = false;
+            // Статическая проверка по предопределенному списку
+            const isProperty = BROWSER_GLOBALS.has(name);
 
-            try {
-                // Динамическая проверка в runtime
-                if (typeof globalThis !== 'undefined' && globalThis.window) {
-                    // В браузере проверяем напрямую
-                    isProperty = name in globalThis.window;
-                } else if (typeof global !== 'undefined') {
-                    // В Node.js создаем минимальную имитацию window для проверки
-                    const mockWindow = {
-                        console: console,
-                        setTimeout: setTimeout,
-                        setInterval: setInterval,
-                        clearTimeout: clearTimeout,
-                        clearInterval: clearInterval,
-                        // Добавляем другие глобальные объекты Node.js, которые есть и в браузере
-                        URL: typeof URL !== 'undefined' ? URL : undefined,
-                        URLSearchParams:
-                            typeof URLSearchParams !== 'undefined'
-                                ? URLSearchParams
-                                : undefined,
-                        crypto:
-                            typeof crypto !== 'undefined' ? crypto : undefined,
-                        performance:
-                            typeof performance !== 'undefined'
-                                ? performance
-                                : undefined,
-                        fetch: typeof fetch !== 'undefined' ? fetch : undefined,
-                        FormData:
-                            typeof FormData !== 'undefined'
-                                ? FormData
-                                : undefined,
-                        Blob: typeof Blob !== 'undefined' ? Blob : undefined,
-                        File: typeof File !== 'undefined' ? File : undefined,
-                        FileReader:
-                            typeof FileReader !== 'undefined'
-                                ? FileReader
-                                : undefined,
-                    };
+            // Кэшируем результат глобально
+            globalPropertiesCache.set(name, isProperty);
+            return isProperty;
+        }
 
-                    // Проверяем, есть ли свойство в mock window
-                    isProperty =
-                        name in mockWindow && mockWindow[name] !== undefined;
+        function isLocalVariable(node, scope) {
+            const name = node.name;
 
-                    // Дополнительно проверяем браузерные API, которых нет в Node.js
-                    const browserOnlyAPIs = [
-                        'document',
-                        'localStorage',
-                        'sessionStorage',
-                        'location',
-                        'history',
-                        'navigator',
-                        'screen',
-                        'alert',
-                        'confirm',
-                        'prompt',
-                        'XMLHttpRequest',
-                        'requestAnimationFrame',
-                        'cancelAnimationFrame',
-                        'getComputedStyle',
-                        'matchMedia',
-                        'open',
-                        'close',
-                        'focus',
-                        'blur',
-                        'scroll',
-                        'scrollTo',
-                        'scrollBy',
-                        'print',
-                        'postMessage',
-                        'addEventListener',
-                        'removeEventListener',
-                        'dispatchEvent',
-                    ];
+            // Проверяем кэш области видимости
+            const cacheKey = `${scope.uid || 'global'}-${name}`;
+            if (scopeCache.has(cacheKey)) {
+                return scopeCache.get(cacheKey);
+            }
 
-                    if (!isProperty && browserOnlyAPIs.includes(name)) {
-                        isProperty = true;
-                    }
+            let currentScope = scope;
+            let isLocal = false;
+
+            // Пропускаем глобальную область видимости
+            while (currentScope && currentScope.type !== 'global') {
+                // Используем Map для быстрого поиска переменных
+                const variablesMap =
+                    currentScope.variablesMap ||
+                    new Map(currentScope.variables.map((v) => [v.name, v]));
+
+                // Кэшируем Map для переиспользования
+                if (!currentScope.variablesMap) {
+                    currentScope.variablesMap = variablesMap;
                 }
-            } catch (error) {
-                // В случае ошибки считаем, что это не window property
-                isProperty = false;
+
+                if (variablesMap.has(name)) {
+                    isLocal = true;
+                    break;
+                }
+                currentScope = currentScope.upper;
             }
 
             // Кэшируем результат
-            windowPropertiesCache.set(name, isProperty);
-            return isProperty;
+            scopeCache.set(cacheKey, isLocal);
+            return isLocal;
         }
 
         return {
             Identifier(node) {
-                // Динамически проверяем, является ли это свойством window
+                // Быстрая проверка - является ли это глобальным объектом
                 if (!isWindowProperty(node.name)) {
                     return;
                 }
 
-                // Пропускаем ЛЮБОЕ использование как свойство объекта (obj.console, window.console, etc.)
+                // Быстрая проверка - используется ли как свойство объекта
+                const parent = node.parent;
                 if (
-                    node.parent?.type === 'MemberExpression' &&
-                    node.parent.object.type === 'Identifier' &&
-                    node.parent.property === node
+                    parent?.type === 'MemberExpression' &&
+                    parent.object.type === 'Identifier' &&
+                    parent.property === node
                 ) {
                     return;
                 }
 
-                // Пропускаем объявления
+                // Быстрая проверка - является ли объявлением
                 if (
-                    node.parent?.type === 'VariableDeclarator' &&
-                    node.parent.id === node
+                    parent?.type === 'VariableDeclarator' &&
+                    parent.id === node
                 ) {
                     return;
                 }
                 if (
-                    node.parent?.type === 'FunctionDeclaration' &&
-                    node.parent.id === node
+                    parent?.type === 'FunctionDeclaration' &&
+                    parent.id === node
                 ) {
                     return;
                 }
-                if (
-                    node.parent?.type === 'Property' &&
-                    node.parent.key === node
-                ) {
+                if (parent?.type === 'Property' && parent.key === node) {
                     return;
                 }
                 if (
-                    node.parent?.type === 'ImportSpecifier' ||
-                    node.parent?.type === 'ImportDefaultSpecifier'
+                    parent?.type === 'ImportSpecifier' ||
+                    parent?.type === 'ImportDefaultSpecifier'
                 ) {
                     return;
                 }
 
                 // Проверяем область видимости - ищем только локальные определения
                 const scope = context.sourceCode.getScope(node);
-                let currentScope = scope;
 
-                // Пропускаем глобальную область видимости
-                while (currentScope && currentScope.type !== 'global') {
-                    const variable = currentScope.variables.find(
-                        (v) => v.name === node.name
-                    );
-                    if (variable) {
-                        return; // Найдена локальная переменная
-                    }
-                    currentScope = currentScope.upper;
+                // Если это локальная переменная, пропускаем
+                if (isLocalVariable(node, scope)) {
+                    return;
                 }
 
                 context.report({
