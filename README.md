@@ -8,26 +8,29 @@
 
 ## Установка
 
-````
+```
 pnpm add @budarin/eslint-plugin-require-global-container
-``
+```
 
 добавляем плагин в конфигурацию eslint
 
 ```js
-import { requireGlobalContainerPlugin } from '@budarin/eslint-plugin-require-global-container'
+import { requireGlobalContainerPlugin } from '@budarin/eslint-plugin-require-global-container';
 
 export const srcTsConfig = {
     plugins: {
         'require-global-container': requireGlobalContainerPlugin,
     },
     rules: {
-        'require-global-container/require-global-container': ['error', {
-            defaultContainer: 'window',
-            exceptions: []
-        }],
-    }
-}
+        'require-global-container/require-global-container': [
+            'error',
+            {
+                defaultContainer: 'window',
+                exceptions: [],
+            },
+        ],
+    },
+};
 ```
 
 ## Примеры
@@ -40,7 +43,7 @@ localStorage.setItem('key', 'value');
 document.getElementById('root');
 setTimeout(() => {}, 1000);
 fetch('/api/data');
-````
+```
 
 ### ✅ Правильно (через объекты-контейнеры)
 
