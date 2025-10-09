@@ -222,3 +222,6 @@ export const requireGlobalContainerPlugin = {
         'require-global-container': requireGlobalContainer,
     },
 };
+
+// Экспорт по умолчанию для совместимости с ESLint
+export default requireGlobalContainerPlugin;
