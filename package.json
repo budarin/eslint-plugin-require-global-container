@@ -16,7 +16,7 @@
         "prettier": "^3.6.2"
     },
     "scripts": {
-        "build": "mkdir -p dist && cp -rf src/. dist/ >/dev/null 2>&1",
+        "build": "sh ./scripts/build.sh",
         "pnpm-install": "pnpm install",
         "upgrade-dependencies": "pnpm upgrade -i",
         "publish-package": "pnpm build && pnpm publish --access=public"
