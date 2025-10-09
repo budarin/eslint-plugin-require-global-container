@@ -52,7 +52,7 @@ fetch('/api/data');
 window.console.log('test');
 window.localStorage.setItem('key', 'value');
 
-// через объект, описывающий данный объект
+// через объект
 const browser = isTest ? windowMock : window;
 ...
 browser.console.log('test');
