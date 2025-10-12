@@ -332,10 +332,27 @@ const requireGlobalContainer = {
             return isLocal;
         }
 
+        function isInTypeAnnotation(node) {
+            let current = node.parent;
+            while (current) {
+                // Проверяем все TypeScript узлы, связанные с типами
+                if (current.type && current.type.startsWith('TS')) {
+                    return true;
+                }
+                current = current.parent;
+            }
+            return false;
+        }
+
         return {
             Identifier(node) {
                 // Быстрая проверка - является ли это глобальным объектом
                 if (!isWindowProperty(node.name)) {
+                    return;
+                }
+
+                // Пропускаем TypeScript аннотации типов
+                if (isInTypeAnnotation(node)) {
                     return;
                 }
 
