@@ -22,7 +22,7 @@ export const сonfig = {
         'require-global-container': requireGlobalContainerPlugin,
     },
     rules: {
-        'require-global-container/require-global-container': ['error'],
+        'require-global-container/require-global-container': 'error',
     },
 };
 ```
