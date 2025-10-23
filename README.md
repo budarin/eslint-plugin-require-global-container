@@ -62,10 +62,14 @@ browser.localStorage.setItem('key', 'value');
 ## Конфигурация
 
 ```javascript
-'require-global-container/require-global-container': ['error', {
-    defaultContainer: 'window',  // Контейнер для автоисправления
-    exceptions: []               // Исключения из проверки
-}]
+// eslint.config.js
+import { requireGlobalContainerPlugin } from '@budarin/eslint-plugin-require-global-container';
+
+export const config = {
+    plugins: {
+        'require-global-container': requireGlobalContainerPlugin,
+    },
+};
 ```
 
 ## Преимущества для тестирования
