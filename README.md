@@ -22,13 +22,7 @@ export const сonfig = {
         'require-global-container': requireGlobalContainerPlugin,
     },
     rules: {
-        'require-global-container/require-global-container': [
-            'error',
-            {
-                defaultContainer: 'window',
-                exceptions: [],
-            },
-        ],
+        'require-global-container/require-global-container': ['error'],
     },
 };
 ```
@@ -57,19 +51,6 @@ const browser = isTest ? windowMock : window;
 ...
 browser.console.log('test');
 browser.localStorage.setItem('key', 'value');
-```
-
-## Конфигурация
-
-```javascript
-// eslint.config.js
-import { requireGlobalContainerPlugin } from '@budarin/eslint-plugin-require-global-container';
-
-export const config = {
-    plugins: {
-        'require-global-container': requireGlobalContainerPlugin,
-    },
-};
 ```
 
 ## Преимущества для тестирования
