@@ -356,11 +356,14 @@ const requireGlobalContainer = {
                     return;
                 }
 
-                // Быстрая проверка - используется ли как свойство объекта
+                // Быстрая проверка - используется ли как свойство в цепочке доступа
+                // Проверяем все уровни вложенности (например: window.Number.parseFloat)
+                // Пропускаем только если идентификатор является property, а не object
+                // (window.Number.parseFloat - пропускаем parseFloat и Number, но не window)
+                // (Number.parseFloat - не пропускаем Number, так как это прямое использование)
                 const parent = node.parent;
                 if (
                     parent?.type === 'MemberExpression' &&
-                    parent.object.type === 'Identifier' &&
                     parent.property === node
                 ) {
                     return;
