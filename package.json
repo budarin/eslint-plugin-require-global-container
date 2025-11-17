@@ -1,5 +1,5 @@
 {
-    "version": "1.0.14",
+    "version": "1.0.15",
     "name": "@budarin/eslint-plugin-require-global-container",
     "description": "Eslint plugin for checking container name in require",
     "author": "Vadim Budarin",

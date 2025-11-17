@@ -224,8 +224,6 @@ const BROWSER_GLOBALS = new Set([
     // === NODE.JS ГЛОБАЛЫ (если используются в браузерном контексте) ===
     'Buffer',
     'process',
-    'global',
-    'globalThis',
 
     // === ДОПОЛНИТЕЛЬНЫЕ ГЛОБАЛЬНЫЕ ФУНКЦИИ ===
     'eval',
